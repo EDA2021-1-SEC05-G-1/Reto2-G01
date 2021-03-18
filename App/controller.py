@@ -1,38 +1,90 @@
-﻿"""
- * Copyright 2020, Departamento de sistemas y Computación,
- * Universidad de Los Andes
- *
- *
- * Desarrolado para el curso ISIS1225 - Estructuras de Datos y Algoritmos
- *
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along withthis program.  If not, see <http://www.gnu.org/licenses/>.
- """
-
-import config as cf
+﻿import config as cf
+from DISClib.ADT import list as lt
 import model
 import csv
 
 
-"""
-El controlador se encarga de mediar entre la vista y el modelo.
-"""
+def newCatalog():
+    catalog = model.newCatalog()
+    return catalog
 
-# Inicialización del Catálogo de libros
 
-# Funciones para la carga de datos
+def loadData(catalog):
+    loadVideos(catalog)
+    loadCategories(catalog)
 
-# Funciones de ordenamiento
 
-# Funciones de consulta sobre el catálogo
+def loadVideos(catalog):
+    videoFile = cf.data_dir+'videos-small.csv'
+    inputFile = csv.DictReader(open(videoFile, encoding="utf-8"))
+    for video in inputFile:
+        model.addVideo(catalog, video)
+
+
+def loadCategories(catalog):
+    categoryFile = cf.data_dir+'category-id.csv'
+    inputFile = csv.DictReader(open(categoryFile, encoding="utf-8"))
+    for category in inputFile:
+        model.addCategory(catalog, category)
+
+
+def getFirstVideo(catalog):
+    return model.getFirstVideo(catalog)
+
+
+def getMostViewedVideosByCountryAndCategory(catalog, country, categoryId, n):
+    lst = model.sortVideosByViews(catalog)
+    emptyLst = model.emptyList()
+    count = 0
+    for video in lt.iterator(lst):
+        if(count < int(n)):
+            if(video['country'] == country and video['category_id'] == categoryId):
+                lt.addLast(emptyLst, video)
+                count += 1
+    return emptyLst
+
+
+def getVideoWithMostTrendingDaysByCountry(catalog, country):
+    lst = model.sortVideosByTrendingDays(catalog)
+    for video in lt.iterator(lst):
+        if(video['country'] == country):
+            return video
+
+
+def getVideoWithMostTrendingDaysByCategory(catalog, categoryId):
+    lst = model.sortVideosByTrendingDays(catalog)
+    for video in lt.iterator(lst):
+        if(video['category_id'] == categoryId):
+            return video
+
+
+def getTrendingDays(video):
+    return model.getTrendingDays(video)
+
+
+def getMostLikedVideosByCountryAndTag(catalog, country, tag, n):
+    lst = model.sortVideosByLikes(catalog)
+    emptyLst = model.emptyList()
+    count = 0
+    for video in lt.iterator(lst):
+        if(count <= int(n)):
+            if(video['country'] == country):
+                hasTag = False
+                for tagItem in video['tags'].split('|'):
+                    finalTag = tagItem.replace('"', "")
+                    if(finalTag == tag):
+                        hasTag = True
+                if(hasTag):
+                    lt.addLast(emptyLst, video)
+                    count += 1
+    return emptyLst
+
+def getMostLikedVideos(catalog,n):
+  lst = model.sortVideosByLikes(catalog)
+  emptyLst = model.emptyList()
+  count = 0 
+  for video in lt.iterator(lst):
+        if(count <= int(n)):
+            lt.addLast(emptyLst, video)
+            count += 1
+        return emptyLst

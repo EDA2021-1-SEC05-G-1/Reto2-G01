@@ -1,58 +1,111 @@
-﻿"""
- * Copyright 2020, Departamento de sistemas y Computación, Universidad
- * de Los Andes
- *
- *
- * Desarrolado para el curso ISIS1225 - Estructuras de Datos y Algoritmos
- *
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along withthis program.  If not, see <http://www.gnu.org/licenses/>.
- """
-
-import config as cf
+﻿import config as cf
 import sys
 import controller
 from DISClib.ADT import list as lt
 assert cf
 
 
-"""
-La vista se encarga de la interacción con el usuario
-Presenta el menu de opciones y por cada seleccion
-se hace la solicitud al controlador para ejecutar la
-operación solicitada
-"""
-
 def printMenu():
+    print("*"*asteriskNumber)
     print("Bienvenido")
-    print("1- Cargar información en el catálogo")
-    print("2- ")
+    print("1- Cargar informacion en el catalogo")
+    print("2- N videos con mas views tendencia en un pais por categoria")
+    print("3- Video trending por mas dias en un pais")
+    print("4- Video trending por mas dias por categoria")
+    print("5- N videos con mas likes por pais con un tag en especifico")
+    print("6- N videos con mas likes")
+    print("*"*asteriskNumber)
+
 
 catalog = None
+asteriskNumber = 60
 
-"""
-Menu principal
-"""
+
+
 while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
-
+        print("*"*asteriskNumber)
+        catalog = controller.newCatalog()
+        controller.loadData(catalog)
+        print("Se cargaron " + str(lt.size(catalog["videos"])) + " videos.")
+        print("*"*asteriskNumber)
+        firstElement = controller.getFirstVideo(catalog)
+        print("Informacion del primer video")
+        print("*"*asteriskNumber)
+        print("title: "+firstElement["title"])
+        print("channel_title: "+firstElement["channel_title"])
+        print("trending_date: "+firstElement["trending_date"])
+        print("country: "+firstElement["country"])
+        print("views: "+firstElement["views"])
+        print("likes: "+firstElement["likes"])
+        print("dislikes: "+firstElement["dislikes"])
+        print("*"*asteriskNumber)
+        print("Categorias")
+        print("*"*asteriskNumber)
+        for category in lt.iterator(catalog["categories"]):
+            print(category['id']+": "+category['name'])
     elif int(inputs[0]) == 2:
-        pass
-
+        category = input('Ingrese la categoria (category_id):\n')
+        country = input('Ingrese el pais (country):\n')
+        n = input('Numeros de videos a listar:\n')
+        videosByCountry = controller.getMostViewedVideosByCountryAndCategory(
+            catalog, country, category, n)
+        for video in lt.iterator(videosByCountry):
+            print("*"*asteriskNumber)
+            print('trending_date: '+video['trending_date'])
+            print('title: '+video['title'])
+            print('publish_time: '+video['publish_time'])
+            print('views: '+video['views'])
+            print('likes: '+video['likes'])
+            print('dislikes: '+video['dislikes'])
+    elif int(inputs[0]) == 3:
+        country = input('Ingrese el pais (country):\n')
+        video = controller.getVideoWithMostTrendingDaysByCountry(
+            catalog, country)
+        print("*"*asteriskNumber)
+        print("title: "+video['title'])
+        print("channel_title: "+video['channel_title'])
+        print("country: "+video['country'])
+        print("Días: "+str(controller.getTrendingDays(video)))
+    elif int(inputs[0]) == 4:
+        category = input('Ingrese la categoria (category_id):\n')
+        video = controller.getVideoWithMostTrendingDaysByCategory(
+            catalog, category)
+        print("*"*asteriskNumber)
+        print("title: "+video['title'])
+        print("channel_title: "+video['channel_title'])
+        print("category_id: "+video['category_id'])
+        print("Días: "+str(controller.getTrendingDays(video)))
+    elif int(inputs[0]) == 5:
+        country = input('Ingrese el pais (country):\n')
+        tag = input('Ingrese el tag:\n')
+        n = input('Numeros de videos a listar:\n')
+        videosTag = controller.getMostLikedVideosByCountryAndTag(
+            catalog, country, tag, n)
+        for video in lt.iterator(videosTag):
+            print("*"*asteriskNumber)
+            print("Title: "+video['title'])
+            print("channel_title: "+video['channel_title'])
+            print("publish_time: "+video['publish_time'])
+            print("views: "+video['views'])
+            print("likes: "+video['likes'])
+            print("dislikes: "+video['dislikes'])
+            print("tags: "+video['tags'])
+    elif int(inputs[0]) == 6:
+        n = input('Numeros de videos a listar:\n')
+        videos = controller.getMostLikedVideos(catalog, n)
+        for video in lt.iterator(videos):
+            print("*"*asteriskNumber)
+            print("Title: "+video['title'])
+            print("channel_title: "+video['channel_title'])
+            print("publish_time: "+video['publish_time'])
+            print("views: "+video['views'])
+            print("likes: "+video['likes'])
+            print("dislikes: "+video['dislikes'])
+            print("tags: "+video['tags'])
     else:
         sys.exit(0)
 sys.exit(0)
