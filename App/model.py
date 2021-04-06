@@ -7,50 +7,132 @@ import datetime
 
 
 
+
 def newCatalog():
     
-     catalog = {'videos': None,
+    catalog = {'videos': None,
                'videosIds': None,
                'country': None,
                'views': None,
                'likes': None,
-               'dislikes': None
-               'trending_date': None
-               'publish_time': None
+               'dislikes': None,
+               'trending_date': None,
+               'publish_time': None,
                'categories': None}
     
     catalog['videos'] = lt.newList()
     catalog['categories'] = lt.newList()
-    catalog['videosIds'] = mp.newMap(34500,
+    catalog['videosIds'] = mp.newMap(10,
                                 maptype='PROBING',
                                 loadfactor=0.5,
                                 comparefunction=compareVideosIds)
-    catalog['country'] = mp.newMap(34500,
+    catalog['country'] = mp.newMap(10,
                                 maptype='PROBING',
                                 loadfactor=0.5,
                                 comparefunction=compareCountry)
-    catalog['views'] = mp.newMap(34500,
+    catalog['views'] = mp.newMap(10,
                                 maptype='PROBING',
                                 loadfactor=0.5,
                                 comparefunction=compareViews)
-    catalog['likes'] = mp.newMap(34500,
+    catalog['likes'] = mp.newMap(10,
                                 maptype='PROBING',
                                 loadfactor=0.5,
                                 comparefunction=compareLikes)
-    catalog['dislikes'] = mp.newMap(34500,
+    catalog['dislikes'] = mp.newMap(10,
                                 maptype='PROBING',
                                 loadfactor=0.5,
                                 comparefunction=compareDislikes)
-    catalog['trending_date'] = mp.newMap(34500,
+    catalog['trending_date'] = mp.newMap(10,
                                 maptype='PROBING',
                                 loadfactor=0.5,
                                 comparefunction=compareTrendingDate)
-    catalog['publish_time'] = mp.newMap(34500,
+    catalog['publish_time'] = mp.newMap(10,
                                 maptype='PROBING',
                                 loadfactor=0.5,
                                 comparefunction=comparePublishTime)       
     return catalog
+# ==============================
+# Funciones de Comparacion
+# ==============================
 
+
+def compareVideosIds(id1, id2):
+    """
+    Compara dos ids de dos videos
+    """
+    if (id1 == id2):
+        return 0
+    elif id1 > id2:
+        return 1
+    else:
+        return -1
+def compareCountry (id1,id2):
+    if (id1 == id2):
+        return 0
+    elif id1 > id2:
+        return 1
+    else:
+        return -1
+
+def compareViews(id1,id2):
+    if (id1 == id2):
+        return 0
+    elif id1 > id2:
+        return 1
+    else:
+        return -1
+def compareLikes(id1,id2):
+    if (id1 == id2):
+        return 0
+    elif id1 > id2:
+        return 1
+    else:
+        return -1
+def compareDislikes(id1,id2):
+    if (id1 == id2):
+        return 0
+    elif id1 > id2:
+        return 1
+    else:
+        return -1
+def compareTrendingDate(id1,id2):
+    if (id1 == id2):
+        return 0
+    elif id1 > id2:
+        return 1
+    else:
+        return -1
+def comparePublishTime(id1,id2):
+    if (id1 == id2):
+        return 0
+    elif id1 > id2:
+        return 1
+    else:
+        return -1
+        
+def buscacategoria(categoria,catalog):
+    i=0
+    mp.get()
+    me.getValue()
+    mp.Keyset()
+    while i<=mp.size(catalog['categories']):
+        tempelement=lt.getElement(catalog['categories'],i)
+        if tempelement['name']==str(" "+categoria):
+            return int(tempelement['id'])
+        i+=1
+    return i
+def filtrada(catalog,pais,id_categoria,numero_videos):
+    tad=lt.newList('ARRAY_LIST')
+    lista_n=[]
+    i=1
+    while i< (lt.size(catalog['videos'])):
+        if (pais in (lt.getElement(catalog['videos'],i)['country'])) and (str(id_categoria) in (lt.getElement(catalog['videos'],i)['category_id'])):
+            lt.addLast(tad,lt.getElement(catalog['videos'],i))
+        i+=1
+    a=tad.copy()
+    mer.sort(a,cmpVideosByViews)
+    b=lt.subList(a,1,numero_videos)
+    return b
 
 def emptyList():
     return lt.newList('ARRAY_LIST')
@@ -84,9 +166,6 @@ def getTrendingDays(video):
         "20"+trendingDateString[0]), int(trendingDateString[2]), int(trendingDateString[1]))
     return (trendingDate - publishTime).days
 
-
-def compareViews(video1, video2):
-    return (int(video1['views']) > int(video2['views']))
 
 
 def compareTrendingDays(video1, video2):

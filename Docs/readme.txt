@@ -1,2 +1,0 @@
-**Sebastian Contreras
-**alentina Goyeneche

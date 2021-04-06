@@ -14,6 +14,7 @@ def printMenu():
     print("4- Video trending por mas dias por categoria")
     print("5- N videos con mas likes por pais con un tag en especifico")
     print("6- N videos con mas likes")
+    print("7- Salir")
     print("*"*asteriskNumber)
 
 
@@ -45,8 +46,12 @@ while True:
         print("*"*asteriskNumber)
         print("Categorias")
         print("*"*asteriskNumber)
+        answer = controller.loadData(catalog)
         for category in lt.iterator(catalog["categories"]):
-            print(category['id']+": "+category['name'])
+            print(category['id'] + category['name'])
+        print("Tiempo [ms]: ", f"{answer[0]:.3f}", "  ||  ",
+              "Memoria [kB]: ", f"{answer[1]:.3f}")
+        print(catalog)
     elif int(inputs[0]) == 2:
         category = input('Ingrese la categoria (category_id):\n')
         country = input('Ingrese el pais (country):\n')
