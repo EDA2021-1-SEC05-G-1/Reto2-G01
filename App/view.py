@@ -31,7 +31,7 @@ while True:
         print("Cargando información de los archivos ....")
         print("*"*asteriskNumber)
         catalog = controller.newCatalog()
-        controller.loadData(catalog)
+        answer = controller.loadData(catalog)
         print("Se cargaron " + str(lt.size(catalog["videos"])) + " videos.")
         print("*"*asteriskNumber)
         firstElement = controller.getFirstVideo(catalog)
@@ -47,7 +47,6 @@ while True:
         print("*"*asteriskNumber)
         print("Categorias")
         print("*"*asteriskNumber)
-        answer = controller.loadData(catalog)
         for category in lt.iterator(catalog['categories']):
             print(category['id'] + category['name'])
         print("Tiempo [ms]: ", f"{answer[0]:.3f}", "  ||  ",
