@@ -3,6 +3,7 @@ import sys
 import controller
 from DISClib.ADT import list as lt
 assert cf
+from DISClib.ADT import map as mp
 
 
 def printMenu():
@@ -47,11 +48,10 @@ while True:
         print("Categorias")
         print("*"*asteriskNumber)
         answer = controller.loadData(catalog)
-        for category in lt.iterator(catalog["categories"]):
+        for category in lt.iterator(catalog['categories']):
             print(category['id'] + category['name'])
         print("Tiempo [ms]: ", f"{answer[0]:.3f}", "  ||  ",
               "Memoria [kB]: ", f"{answer[1]:.3f}")
-        print(catalog)
     elif int(inputs[0]) == 2:
         category = input('Ingrese la categoria (category_id):\n')
         country = input('Ingrese el pais (country):\n')

@@ -35,7 +35,6 @@ def loadVideos(catalog):
     inputFile = csv.DictReader(open(videoFile, encoding="utf-8"))
     for video in inputFile:
         model.addVideo(catalog, video)
-        break
 
 
 def loadCategories(catalog):
