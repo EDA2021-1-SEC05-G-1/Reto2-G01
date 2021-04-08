@@ -19,36 +19,36 @@ def newCatalog():
                'trending_date': None,
                'publish_time': None,
                'categories': None}
-    
+    #Si es el grande aumentar el tamaño de tabla a 376000
     catalog['videos'] = lt.newList()
     catalog['categories'] = lt.newList()
-    catalog['videosIds'] = mp.newMap(34500,
-                                maptype='PROBING',
-                                loadfactor=0.5,
+    catalog['videosIds'] = mp.newMap(376000,
+                                maptype='CHAINING',
+                                loadfactor=6.0,
                                 comparefunction=compareVideosIds)
-    catalog['country'] = mp.newMap(34500,
-                                maptype='PROBING',
-                                loadfactor=0.5,
+    catalog['country'] = mp.newMap(376000, 
+                                maptype='CHAINING',
+                                loadfactor=6.0,
                                 comparefunction=compareCountry)
-    catalog['views'] = mp.newMap(34500,
-                                maptype='PROBING',
-                                loadfactor=0.5,
+    catalog['views'] = mp.newMap(376000,
+                                maptype='CHAINING',
+                                loadfactor=6.0,
                                 comparefunction=compareViews)
-    catalog['likes'] = mp.newMap(34500,
-                                maptype='PROBING',
-                                loadfactor=0.5,
+    catalog['likes'] = mp.newMap(376000,
+                                maptype='CHAINING',
+                                loadfactor=6.0,
                                 comparefunction=compareLikes)
-    catalog['dislikes'] = mp.newMap(34500,
-                                maptype='PROBING',
-                                loadfactor=0.5,
+    catalog['dislikes'] = mp.newMap(376000,
+                                maptype='CHAINING',
+                                loadfactor=6.0,
                                 comparefunction=compareDislikes)
-    catalog['trending_date'] = mp.newMap(34500,
-                                maptype='PROBING',
-                                loadfactor=0.5,
+    catalog['trending_date'] = mp.newMap(376000,
+                                maptype='CHAINING',
+                                loadfactor=6.0,
                                 comparefunction=compareTrendingDate)
-    catalog['publish_time'] = mp.newMap(34500,
-                                maptype='PROBING',
-                                loadfactor=0.5,
+    catalog['publish_time'] = mp.newMap(376000,
+                                maptype='CHAINING',
+                                loadfactor=6.0,
                                 comparefunction=comparePublishTime)       
     return catalog
 # ==============================
