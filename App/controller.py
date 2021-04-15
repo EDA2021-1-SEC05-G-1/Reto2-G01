@@ -27,7 +27,6 @@ def loadData(catalog):
     delta_memory = deltaMemory(start_memory, stop_memory)
 
     return delta_time, delta_memory
-    
 
 
 def loadVideos(catalog):
@@ -42,70 +41,89 @@ def loadCategories(catalog):
     inputFile = csv.DictReader(open(categoryFile, encoding="utf-8"),delimiter='\t')
     for category in inputFile:
         model.addCategory(catalog, category)
-    
 
 def getFirstVideo(catalog):
     return model.getFirstVideo(catalog)
 
-
+##REQ1
+#Cambio: Antes se hacia un filtro, creando una lista del pais a partir del catalogo, 
+#        ahora no es necesario. 
+#        Sería la complejidad del for mas la complejidad del sort. merge+tamaño de lst -OJO:While
+def buscarcategoria(category,catalog):
+    return model.buscarcategoria(category,catalog)
+#Req 1
 def getMostViewedVideosByCountryAndCategory(catalog, country, categoryId, n):
-    lst = model.sortVideosByViews(catalog)
-    emptyLst = model.emptyList()
-    count = 0
-    for video in lt.iterator(lst):
-        if(count < int(n)):
-            if(video['country'] == country and video['category_id'] == categoryId):
-                lt.addLast(emptyLst, video)
-                count += 1
-    return emptyLst
+    
+    tracemalloc.start()
+    start_time = getTime()
+    start_memory = getMemory()
+    devuelve=model.getMostViewedVideosByCountryAndCategory(catalog,country,categoryId,n)
+    stop_memory = getMemory()
+    stop_time = getTime()
+    tracemalloc.stop()
 
+    delta_time = stop_time - start_time
+    delta_memory = deltaMemory(start_memory, stop_memory)
 
+    return devuelve,delta_time, delta_memory
+    
+
+##REQ2
+#Cambio
+#n^2- Tamaño de la lista-for anidado
 def getVideoWithMostTrendingDaysByCountry(catalog, country):
-    lst = model.sortVideosByTrendingDays(catalog)
-    for video in lt.iterator(lst):
-        if(video['country'] == country):
-            return video
 
+    tracemalloc.start()
+    start_time = getTime()
+    start_memory = getMemory()
+    devuelve=model.getVideoWithMostTrendingDaysByCountry(catalog,country)
+    stop_memory = getMemory()
+    stop_time = getTime()
+    tracemalloc.stop()
 
+    delta_time = stop_time - start_time
+    delta_memory = deltaMemory(start_memory, stop_memory)
+
+    return devuelve,delta_time, delta_memory
+    
+    
+##REQ3
+# Cambio
 def getVideoWithMostTrendingDaysByCategory(catalog, categoryId):
-    lst = model.sortVideosByTrendingDays(catalog)
-    for video in lt.iterator(lst):
-        if(video['category_id'] == categoryId):
-            return video
+    tracemalloc.start()
+    start_time = getTime()
+    start_memory = getMemory()
+    devuelve=model.getVideoWithMostTrendingDaysByCategory(catalog, categoryId)
+    stop_memory = getMemory()
+    stop_time = getTime()
+    tracemalloc.stop()
+
+    delta_time = stop_time - start_time
+    delta_memory = deltaMemory(start_memory, stop_memory)
+
+    return devuelve,delta_time, delta_memory
 
 
-def getTrendingDays(video):
-    return model.getTrendingDays(video)
-
-
+def getTrendingDays(video,catalog):
+    return model.getTrendingDays(video,catalog)
+##REQ4
+#Cambio
+#Antes se organizaba todo el catalogo por likes y luego se debia comparar por país y por tag.
+#sort+lst.
 def getMostLikedVideosByCountryAndTag(catalog, country, tag, n):
-    lst = model.sortVideosByLikes(catalog)
-    emptyLst = model.emptyList()
-    count = 0
-    for video in lt.iterator(lst):
-        if(count <= int(n)):
-            if(video['country'] == country):
-                hasTag = False
-                for tagItem in video['tags'].split('|'):
-                    finalTag = tagItem.replace('"', "")
-                    if(finalTag == tag):
-                        hasTag = True
-                if(hasTag):
-                    lt.addLast(emptyLst, video)
-                    count += 1
-    return emptyLst
+    tracemalloc.start()
+    start_time = getTime()
+    start_memory = getMemory()
+    devuelve=model.getMostLikedVideosByCountryAndTag(catalog, country, tag, n)
+    stop_memory = getMemory()
+    stop_time = getTime()
+    tracemalloc.stop()
 
-def getMostLikedVideos(catalog,n):
-  lst = model.sortVideosByLikes(catalog)
-  emptyLst = model.emptyList()
-  count = 0 
-  for video in lt.iterator(lst):
-        if(count <= int(n)):
-            lt.addLast(emptyLst, video)
-            count += 1
-        return emptyLst
+    delta_time = stop_time - start_time
+    delta_memory = deltaMemory(start_memory, stop_memory)
 
-
+    return devuelve,delta_time, delta_memory
+    
 # ======================================
 # Funciones para medir tiempo y memoria
 # ======================================
